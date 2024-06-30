@@ -1,0 +1,14 @@
+// This is a single line comment
+
+/* Single line comment using this style */
+/**/
+/
+var hello = "hello";
+/* This
+ * is
+ * a
+ * multiline
+ * comment
+ */
+/* //
+var language = "klox";
