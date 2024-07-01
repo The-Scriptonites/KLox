@@ -6,12 +6,11 @@ class Scanner(private val source: String) {
     private var start = 0
     private var current = 0
     private var line = 1
-//    private var commentDepth = 0
 
     private val keywords: HashMap<String, TokenType> = HashMap()
 
     init {
-        keywords["and"] = AND;
+        keywords["and"] = AND
         keywords["class"] = CLASS
         keywords["else"] = ELSE
         keywords["false"] = FALSE
@@ -118,7 +117,7 @@ class Scanner(private val source: String) {
 
         if (isAtEnd()) {
             error(line, "Unterminated string literal.")
-            return;
+            return
         }
 
         // The closing "
@@ -130,17 +129,17 @@ class Scanner(private val source: String) {
     }
 
     private fun number() {
-        while (isDigit(peek())) advance();
+        while (isDigit(peek())) advance()
 
         // Look for a fractional part.
         if (peek() == '.' && isDigit(peekNext())) {
             // Consume the "."
-            advance();
+            advance()
 
-            while (isDigit(peek())) advance();
+            while (isDigit(peek())) advance()
         }
 
-        addToken(NUMBER, source.substring(start, current).toDouble());
+        addToken(NUMBER, source.substring(start, current).toDouble())
     }
 
     private fun nop() {}
