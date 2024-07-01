@@ -2,13 +2,21 @@
 
 /* Single line comment using this style */
 /**/
-/
-var hello = "hello";
 /* This
  * is
  * a
  * multiline
  * comment
- */
-/* //
-var language = "klox";
+*/
+
+/* Compile this example with
+  /* $ compile ./examples/
+     $ run 'var hello = "hello";' /* exit the REPL */
+   */
+*/
+
+var variable = "Variable is set to this string, end with semicolon";
+fun what() {
+   return (8 < len and !up);
+}
+
