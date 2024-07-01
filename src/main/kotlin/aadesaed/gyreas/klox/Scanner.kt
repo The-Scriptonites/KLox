@@ -1,5 +1,8 @@
+package aadesaed.gyreas.klox
+
+import Token
+import TokenType
 import TokenType.*
-import aadesaed.gyreas.klox.error
 
 class Scanner(private val source: String) {
     private var tokens = ArrayList<Token>()
