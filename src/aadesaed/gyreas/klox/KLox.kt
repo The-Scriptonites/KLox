@@ -2,41 +2,34 @@ package aadesaed.gyreas.klox
 
 import Token
 import TokenType
-import aadesaed.gyreas.tool.AstPrinter
-import aadesaed.gyreas.tool.RpnPrinter
-
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.nio.file.Files
 import java.nio.file.Paths
-
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
-    println("./klox ${args.joinToString()}\n")
-
     if (args.size > 1) {
         println("usage: klox [script]")
         exitProcess(64)
     } else if (args.size == 1) {
-//        runFile(args[0])
-        runPrompt()
+        runFile(args[0])
     } else {
-        val testSource =
-            """
-            // this is a comment
-            (()){} // grouping stuff
-            !* + -/=<> <= == // operators
-            """
-//        run(testSource)
         runPrompt()
     }
 }
 
+val interpreter = Interpreter()
+var hadError = false
+var hadRuntimeError = false
+
 fun runFile(filePath: String) {
     val bytes = Files.readAllBytes(Paths.get(filePath))
+
     run(String(bytes))
+
     if (hadError) exitProcess(65)
+    if (hadRuntimeError) exitProcess(70)
 }
 
 fun runPrompt() {
@@ -45,9 +38,13 @@ fun runPrompt() {
 
     while (true) {
         print("> ")
+
         val line = reader.readLine() ?: break
+
         run(line)
+
         hadError = false
+        hadRuntimeError = false
     }
 }
 
@@ -57,17 +54,15 @@ fun run(source: String) {
     val parser = Parser(tokens)
     val expression = parser.parse()
 
-    if (hadError) return;
+    if (hadError) return
 
-    println(AstPrinter().print(expression!!))
-    println(RpnPrinter().print(expression))
+    interpreter.interpret(expression!!)
 }
 
 fun error(line: Int, message: String) {
     report(line, "", message)
 }
 
-var hadError = false
 fun report(line: Int, where: String, message: String) {
     System.err.println("[line $line] Error$where: $message")
     hadError = true
@@ -80,3 +75,14 @@ fun error(token: Token, message: String?) {
         report(token.line, (" at '" + token.lexeme).toString() + "'", message!!)
     }
 }
+
+fun runtimeError(error: RuntimeError) {
+    System.err.println(
+            """
+        ${error.message}
+        [line${error.token.line}]
+        """.trimIndent()
+    )
+    hadRuntimeError = true
+}
+
