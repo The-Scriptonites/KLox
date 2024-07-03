@@ -1,3 +1,4 @@
+expression-seq → expression ( "," expression )* ;
 expression     → equality ;
 equality       → comparison ( ( "!=" | "==" ) comparison )* ;
 comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
@@ -6,4 +7,4 @@ factor         → unary ( ( "/" | "*" ) unary )* ;
 unary          → ( "!" | "-" ) unary
                | primary ;
 primary        → NUMBER | STRING | "true" | "false" | "nil"
-               | "(" expression ")" ;
+               | "(" expression-seq ")" ;

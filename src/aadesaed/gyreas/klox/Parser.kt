@@ -13,10 +13,18 @@ class Parser(private val tokens: ArrayList<Token>) {
 
     fun parse(): Expr? {
         return try {
-            expression()
+            expressionSeq()
         } catch (error: ParseError) {
             null
         }
+    }
+
+    private fun expressionSeq(): Expr {
+        var expr = expression()
+        while (match(COMMA)) {
+            expr = expression()
+        }
+        return expr
     }
 
     private fun expression(): Expr {
@@ -121,7 +129,7 @@ class Parser(private val tokens: ArrayList<Token>) {
             match(NIL) -> return Literal(null)
             match(NUMBER, STRING) -> return Literal(previous().literal)
             match(LEFT_PAREN) -> {
-                val expr = expression()
+                val expr = expressionSeq()
                 consume(RIGHT_PAREN, "Expect ')' after expression.")
                 return Grouping(expr)
             }

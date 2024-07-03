@@ -1,22 +1,19 @@
-// This is a single line comment
+//// This is a single line comment
+//
+///* Single line comment using this style */
+///**/
+///* This
+// * is
+// * a
+// * multiline
+// * comment
+//*/
 
-/* Single line comment using this style */
-/**/
-/* This
- * is
- * a
- * multiline
- * comment
-*/
+///* Compile this example with
+//  /* $ compile ./examples/
+//     $ run 'var hello = "hello";' /* exit the REPL */
+//   */
+//*/
 
-/* Compile this example with
-  /* $ compile ./examples/
-     $ run 'var hello = "hello";' /* exit the REPL */
-   */
-*/
-
-var variable = "Variable is set to this string, end with semicolon";
-fun what() {
-   return (8 < len and !up);
-}
-
+3 + 3 / 3
+3 - 3, 8 + 3, (5, 3 + 8)
