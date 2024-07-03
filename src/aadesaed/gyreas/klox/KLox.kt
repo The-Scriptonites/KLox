@@ -1,9 +1,15 @@
 package aadesaed.gyreas.klox
 
+import Token
+import TokenType
+import aadesaed.gyreas.tool.AstPrinter
+import aadesaed.gyreas.tool.RpnPrinter
+
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.nio.file.Files
 import java.nio.file.Paths
+
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
@@ -13,7 +19,8 @@ fun main(args: Array<String>) {
         println("usage: klox [script]")
         exitProcess(64)
     } else if (args.size == 1) {
-        runFile(args[0])
+//        runFile(args[0])
+        runPrompt()
     } else {
         val testSource =
             """
@@ -22,7 +29,7 @@ fun main(args: Array<String>) {
             !* + -/=<> <= == // operators
             """
 //        run(testSource)
-        runPrompt();
+        runPrompt()
     }
 }
 
@@ -47,10 +54,13 @@ fun runPrompt() {
 fun run(source: String) {
     val scanner = Scanner(source)
     val tokens = scanner.scanTokens()
+    val parser = Parser(tokens)
+    val expression = parser.parse()
 
-    for (token in tokens) {
-        println(token.toString())
-    }
+    if (hadError) return;
+
+    println(AstPrinter().print(expression!!))
+    println(RpnPrinter().print(expression))
 }
 
 fun error(line: Int, message: String) {
@@ -61,4 +71,12 @@ var hadError = false
 fun report(line: Int, where: String, message: String) {
     System.err.println("[line $line] Error$where: $message")
     hadError = true
+}
+
+fun error(token: Token, message: String?) {
+    if (token.type === TokenType.EOF) {
+        report(token.line, " at end", message!!)
+    } else {
+        report(token.line, (" at '" + token.lexeme).toString() + "'", message!!)
+    }
 }

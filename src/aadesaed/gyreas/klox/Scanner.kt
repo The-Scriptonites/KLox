@@ -80,6 +80,7 @@ class Scanner(private val source: String) {
         if (matchNext('/')) {
             while (peek() != '\n' && !isAtEnd()) advance()
         } else if (matchNext('*')) {
+            // TODO: Fix this
             // Skip the comment content
             while (!isAtEnd()) {
                 if (peek() == '*') {
